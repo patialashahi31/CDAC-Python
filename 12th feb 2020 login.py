@@ -1,4 +1,5 @@
 import tkinter as tk
+from registration_Form import *
 class MySecondGui(tk.Frame):
     def __init__(self,master=None):
         super().__init__(master)
@@ -35,10 +36,8 @@ class MySecondGui(tk.Frame):
         print("Password - " + str(self.pwdTf.get()))
 
     def registeruser(self,event):
-        print("User Details")
-        email = input("Enter email")
-        pwd = input("enter pwd")
-        self.new.config(text="New user created")
+        self.master.destroy()
+        app2 = MyGui(tk.Tk())
 
 
 def main():
