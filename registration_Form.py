@@ -1,4 +1,9 @@
 import tkinter as tk
+from mysql.connector import connection
+from mysql.connector import Error
+from tkinter import messagebox
+
+
 class MyGui(tk.Frame):
     def __init__(self,master=None):
         super().__init__(master)
@@ -42,11 +47,37 @@ class MyGui(tk.Frame):
         self.option.place(x=180,y=250)
 
     def show(self):
-        print("Name - " + str(self.userNameTf.get()))
-        print("Password - " + str(self.pwdTf.get()))
-        if(self.var.get()==1):
-            print("Rank - Student")
+
+        username = self.userNameTf.get()
+        pwd = self.pwdTf.get()
+        y=""
+        z = self.var1.get()
+        ranks = self.var.get()
+        if(ranks==1):
+            y += "Student"
         else:
-            print("Rank - Employee")
-        print("Grade - " + str(self.var1.get()))
+            y += "Employee"
+        try:
+            db = connection.MySQLConnection(host="localhost", database="db", user="root", password="root",
+                                                charset="utf8")
+            if db.is_connected() and (len(pwd)>=6 and len(pwd)<=12):
+                s = f"insert into users(id,username,password,grade,rank) values(null,'{username}','{pwd}','{z}','{y}')"
+
+                c = db.cursor()
+                c.execute(s)
+                db.commit()
+
+                messagebox.showinfo("Continue", "Ok")
+
+            else:
+                messagebox.showerror("Error","Password must be 6 to 12 characters long")
+
+
+        except Error as e:
+            print(e)
+
+        finally:
+            db.close()
+
+
 
